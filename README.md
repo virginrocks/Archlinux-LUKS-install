@@ -31,7 +31,7 @@ Setup passkey to avoid double prompt.
 ##you should see the SSID of your wifi router
     iwctl station wlan0 connect SSID
     
-    update sources:
+##Update sources:
     pacman -Sy
 
 #### Create your disk architecture
