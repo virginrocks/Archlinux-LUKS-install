@@ -17,18 +17,18 @@ Setup passkey to avoid double prompt.
 
 #### Boot on usb: 
 
-    make sure scure boot is disabled on BIOS
-    select usb device for boot
+##make sure scure boot is disabled on BIOS
+##select usb device for boot
 
 #### Welcome on ArchLinux!
 
-    if your keyboard is azerty, just load the right configuration by
+##if your keyboard is azerty, just load the right configuration by
     loadkeys fr
 
-    setup wifi if needed
+##setup wifi if needed
     iwctl station wlan0 get-networks
 
-    you should see the SSID of your wifi router
+##you should see the SSID of your wifi router
     iwctl station wlan0 connect SSID
     
     update sources:
