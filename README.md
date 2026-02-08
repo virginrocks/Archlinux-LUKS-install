@@ -220,7 +220,7 @@ select usb device for boot
 
 # 5 Reboot on Arch and install packages 
 
-###### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
+##### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
 # 6 LUKS keyfile, UKIFY, cmdline and crypttab
 
@@ -248,12 +248,18 @@ select usb device for boot
     HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt lvm2 block filesystems fsck)
 
 ### Install ukify
- 
-    sudo pacman -S ukify-tools sbctl
 
-    sudo vim /etc/kernel/uki.conf
+##### Build package from AUR 
+
+    git clone https://aur.archlinux.org/dracut-ukify.git
+
+    cd dracut-ukify
+
+    makepkg -si
 
 ### Create /etc/kernel/uki.conf:
+
+    sudo vim /etc/kernel/uki.conf
 
     [UKI]
     OSRelease=@/etc/os-release
@@ -268,8 +274,13 @@ select usb device for boot
 
     sudo ukify genkey --config=/etc/kernel/uki.conf    
 
+##### Install sbctl
+ 
+    sudo pacman -S sbctl
+
 ### Create /etc/kernel/cmdline  
-###### cmdline is kept simple to avoid errors with absolute path
+
+##### cmdline is kept simple to avoid errors with absolute path
  
     root=/dev/vg/root rw rd.system.gpt_auto=no quiet splash
 
