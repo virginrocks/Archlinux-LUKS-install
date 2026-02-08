@@ -1,11 +1,12 @@
 # Archlinux encrypted install
 
-### Features
+## Features
+
 Install Archlinux on LUKS lvm encrypted disk.
 Install and setup required and usefull tools.
 Setup passkey to avoid double prompt.
 
-### Creating usb bootable installer
+## Creating usb bootable installer
 
 #### Downloading iso
 
@@ -13,28 +14,28 @@ Setup passkey to avoid double prompt.
 
     sudo dd if=path/to/file.iso of=/dev/usb_drive status=progress
 
-### Install process
+## Install process
 
 #### Boot on usb: 
 
 make sure scure boot is disabled on BIOS
 select usb device for boot
 
-#### Welcome on ArchLinux!
+## Welcome on ArchLinux!
 
-####if your keyboard is azerty, just load the right configuration by
+#### if your keyboard is azerty, just load the right configuration by
 
     loadkeys fr
 
-####setup wifi if needed
+#### setup wifi if needed
 
     iwctl station wlan0 get-networks
 
-####you should see the SSID of your wifi router
+#### you should see the SSID of your wifi router
 
     iwctl station wlan0 connect SSID
 
-####Update sources:
+#### Update sources:
 
     pacman -Sy
 
@@ -197,9 +198,7 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-#### Time to reboot without installer
-
-#### 
+## Time to reboot without installer 
 
 #### Update mkinitcpio.conf
     
@@ -252,7 +251,7 @@ select usb device for boot
     fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
     fallback_options="-S autodetect"
 
-#### If you want to avoid the LUKS passphrase:
+## Avoid the LUKS passphrase:
 
 #### Create a key and store it in /etc/crypsetup.d
     
