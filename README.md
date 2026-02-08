@@ -39,15 +39,15 @@ select usb device for boot
 
 ## Welcome on ArchLinux!
 
-### if your keyboard is azerty, just load the right configuration by
+### If your keyboard is azerty, just load the right configuration by
 
     loadkeys fr
 
-### setup wifi if needed
+### Setup wifi if needed
 
     iwctl station wlan0 get-networks
 
-### you should see the SSID of your wifi router
+### You should see the SSID of your wifi router
 
     iwctl station wlan0 connect SSID
 
@@ -218,7 +218,7 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-# 5 Reboot without installer 
+# 5 Reboot on Arch and install packages 
 
 ###### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
