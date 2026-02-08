@@ -1,10 +1,26 @@
-# Archlinux encrypted install
+# Install Archlinux on LVM LUKS2 encrypted disk
 
 ## Features
 
-Install Archlinux on LUKS lvm encrypted disk.
-Install and setup required and usefull tools.
-Setup passkey to avoid double prompt.
+1 Iso
+Download iso and prepare arch iso bootable usb.
+
+2 LUKS LVM
+Prepare the disk, set LUKS2 encryption, create physical volume, volume group and logical volumes.
+
+3 Install arch
+Pacstarp on /mnt, generate /etc/fstab, arch-chroot /mnt and setup the clock, users, network...
+
+4 Bootctl and mkinitcpio
+Setup mkinitcpio.conf, install bootctl, create arch.conf and loader.conf.
+
+5 Boot from installed system
+Install usefull utilities.
+
+6 LUKS Keyfile
+Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
+
+# 1 Iso
 
 ## Creating usb bootable installer
 
@@ -39,7 +55,7 @@ select usb device for boot
 
     pacman -Sy
 
-# Create your disk architecture
+# 2 LUKS LVM disk architecture
 
 ## Prepare the disk
 
@@ -96,6 +112,8 @@ select usb device for boot
     mkfs.ext4 /dev/vg/root    
     mkfs.ext4 /dev/vg/home    
     mkswap /dev/vg/swap    
+
+# 3 Install Archlinux
 
 ### Mount file system
 
@@ -160,7 +178,9 @@ select usb device for boot
     systemctl enable iw.service
     systemctl enable dhcpcd.service
 
-### bootctl
+# 4 Bootctl and mkinitcpio.conf
+
+### Bootctl
  
     bootctl install
 
@@ -198,7 +218,11 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-## Time to reboot without installer 
+# 5 Reboot without installer 
+
+## Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
+
+# 6 LUKS Keyfile
 
 ### Update mkinitcpio.conf
     
