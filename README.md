@@ -220,7 +220,7 @@ select usb device for boot
 
 # 5 Reboot without installer 
 
-## Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
+###### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
 # 6 LUKS keyfile, UKIFY, cmdline and crypttab
 
