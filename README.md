@@ -8,46 +8,46 @@ Setup passkey to avoid double prompt.
 
 ## Creating usb bootable installer
 
-#### Downloading iso
+### Downloading iso
 
-#### Cpying iso on usb device
+### Cpying iso on usb device
 
     sudo dd if=path/to/file.iso of=/dev/usb_drive status=progress
 
 ## Install process
 
-#### Boot on usb: 
+### Boot on usb: 
 
 make sure scure boot is disabled on BIOS
 select usb device for boot
 
 ## Welcome on ArchLinux!
 
-#### if your keyboard is azerty, just load the right configuration by
+### if your keyboard is azerty, just load the right configuration by
 
     loadkeys fr
 
-#### setup wifi if needed
+### setup wifi if needed
 
     iwctl station wlan0 get-networks
 
-#### you should see the SSID of your wifi router
+### you should see the SSID of your wifi router
 
     iwctl station wlan0 connect SSID
 
-#### Update sources:
+### Update sources:
 
     pacman -Sy
 
-#### Create your disk architecture
+# Create your disk architecture
 
-#### Prepare the disk
+## Prepare the disk
 
-#### List your partitions
+### List your partitions
 
     lsblk            # list drive
 
-#### Erase and create partitions: parted, fdisk, cfdisk...choose a disk manager 
+### Erase and create partitions: parted, fdisk, cfdisk...choose a disk manager 
 
     parted /dev/sdX  # enter parted prompt
     p            
@@ -58,126 +58,126 @@ select usb device for boot
     p
     q            
 
-#### Clean up
+### Clean up
 
     dd if=/dev/urandom of=/dev/sdX1 bs=1M status=progress 
     dd if=/dev/urandom of=/dev/sdX2 bs=1M status=progress 
 
-#### Boot partition
+### Boot partition
 
     mkfs.vfat -F32 /dev/sdX1
 
-#### Encryption: create the LUKS container and open the container
+### Encryption: create the LUKS container and open the container
 
     cryptsetup -v luksFormat /dev/sdX2 
     cryptsetup luksOpen /dev/sdX2 lvm
 
-#### Create physical volume ex: named lvm
+### Create physical volume ex: named lvm
 
     pvcreate /dev/mapper/lvm
 
-#### Create a volume group ex: named vg
+### Create a volume group ex: named vg
 
     vgcreate vg /dev/mapper/lvm
 
-#### Create logical volumes
+### Create logical volumes
     
     lvcreate -L 60G vg -n root        
     lvcreate -L 8G vg -n swap       
     lvcreate -l 100%FREE vg -n home        
     lvreduce -L -256M vg/home   
 
-#### Check
+### Check
     
     lsblk -fp        
 
-#### Format file system
+### Format file system
 
     mkfs.ext4 /dev/vg/root    
     mkfs.ext4 /dev/vg/home    
     mkswap /dev/vg/swap    
 
-#### Mount file system
+### Mount file system
 
     mount /dev/vg/root /mnt
     mount --mkdir -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/sda1 /mnt/boot
     mount --mkdir /dev/vg/home /mnt/home
     swapon /dev/vg/swap
 
-#### Install minimum packages
+### Install minimum packages
 
     pacstrap -K /mnt base linux-lts linux-firmware linux-headers intel-ucode sudo vim
 
-#### Generate fstab
+### Generate fstab
 
     genfstab -U /mnt >> /etc/fstab    
 
-#### Archlinux chroot
+### Archlinux chroot
 
     arch-chroot /mnt
 
-#### Time zone
+### Time zone
 
     ln -sf /usr/share/zoneinfo/Region/City /etc/localetime
 
-#### Enable NTP
+### Enable NTP
 
     timedatectl set-ntp true
 
-#### Generate /etc/adjtime  
+### Generate /etc/adjtime  
 
     hwclock --systohc    
 
-#### Genreate locale and uncomment the line matching your language in /etc/locale.gen
+### Genreate locale and uncomment the line matching your language in /etc/locale.gen
 
     locale-gen
 
-#### Create vconsole.conf
+### Create vconsole.conf
 
     touch /etc/vconsole.conf && echo -e "FONT=lat1-16 \nKEYMAP=fr-latin9" > /etc/vconsole.conf         
 
-#### Create /etc/hostname
+### Create /etc/hostname
 
     touch /etc/hostname && echo "yourHostName" > /etc/hostname    
 
-#### Modify /etc/hosts
+### Modify /etc/hosts
 
     echo "127.0.0.1       yourHostName.localdomain localdomain" >> /etc/hosts 
 
-#### Set password for root and non-root user
+### Set password for root and non-root user
     
     passwd    
     useradd -m -G wheel,storage,audio,video -s /bin/bash yourUserName
     passwd yourUserName
 
-#### Uncomment #%wheel ALL=(ALL) ALL in /etc/sudoers to allow non-root user to run sudo 
+### Uncomment #%wheel ALL=(ALL) ALL in /etc/sudoers to allow non-root user to run sudo 
  
     %wheel ALL=(ALL) ALL
 
-#### Network
+### Network
 
     pacman -S dhcpcd iw iwd
     systemctl enable iw.service
     systemctl enable dhcpcd.service
 
-#### bootctl
+### bootctl
  
     bootctl install
 
-#### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
+### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
  
     MODULES=( ext4 dm-mod dm-crypt )
     HOOKS=(...sd-encrypt lvm2 block ...)
 
-#### Install lvm2
+### Install lvm2
  
     pacman -S lvm2
 
-#### Get /dev/sdX2 UUID
+### Get /dev/sdX2 UUID
  
     blkid -s UUID -o value /dev/sdX2  # LUKS UUID
 
-#### Set /boot/loader/entries/arch.conf
+### Set /boot/loader/entries/arch.conf
  
     title	Arch Linux
     linux	/vmlinuz-linux-lts
@@ -186,26 +186,26 @@ select usb device for boot
 
     options systemd.unit=multi-user.target rd.luks.name=$(blkid -s UUID -o value /dev/sdX2)=lvm root=/dev/vg/root rw
  
-#### Set /boot/loader/loader.conf
+### Set /boot/loader/loader.conf
  
     default arch.conf
     timeout 3
     console-mode max
     editor no
 
-#### Reload mkinitcpio
+### Reload mkinitcpio
 
     mkinitcpio -P
     bootctl update
 
 ## Time to reboot without installer 
 
-#### Update mkinitcpio.conf
+### Update mkinitcpio.conf
     
     FILES=( /etc/cryptsetup-keys.d/root.key )
     HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt lvm2 block filesystems fsck)
 
-#### ukify
+### ukify
  
     pacman -S ukify-tools sbctl
 
@@ -222,15 +222,15 @@ select usb device for boot
     PCRPrivateKey=/etc/kernel/pcr-initrd.key.pem
     PCRPublicKey=/etc/kernel/pcr-initrd.pub.pem
 
-#### Generate the key
+### Generate the key
 
     ukify genkey --config=/etc/kernel/uki.conf    
 
-#### keep /etc/kernel/cmdline simple to avoid errors with absolute path 
+### keep /etc/kernel/cmdline simple to avoid errors with absolute path 
  
     root=/dev/vg/root rw rd.system.gpt_auto=no quiet splash
 
-#### /etc/mkinitcpio.d/linux.preset example
+### /etc/mkinitcpio.d/linux.preset example
  
     # mkinitcpio preset file for the 'linux' package
 
@@ -253,31 +253,31 @@ select usb device for boot
 
 ## Avoid the LUKS passphrase:
 
-#### Create a key and store it in /etc/crypsetup.d
+### Create a key and store it in /etc/crypsetup.d
     
     dd bs=512 count=4 if=/dev/urandom iflag=fullblock | install -m 600 /dev/sdX2 /etc/cryptsetup.d/root.key 
 
-#### Check the slots already used for the encryption keys 
+### Check the slots already used for the encryption keys 
  
     cryptsetup luksDump/dev/sdX2
 
-#### Associate this key to your LUKS setup
+### Associate this key to your LUKS setup
  
     cryptsetup luksAddKey /dev/sdX2 /etc/cryptsetup-key.d/root.key
 
-#### Check the slots again
+### Check the slots again
  
     cryptsetup luksDump/dev/sdX2
 
-#### create and setup /etc/crypttab.initramfs so you will not be blocked at boot
+### create and setup /etc/crypttab.initramfs so you will not be blocked at boot
  
     lvm      UUID=xxxxxxxxxxxx   /etc/cryptsetup-key.d/root/key  luks
 
-#### sbctl
+### sbctl
 
     sbctl create-keys
 
-#### Update 
+### Update 
 
     mkinitcpio -P
     bootctl update
