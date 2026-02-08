@@ -228,19 +228,19 @@ select usb device for boot
 
 ### Create a key and store it in /etc/crypsetup.d
     
-    dd bs=512 count=4 if=/dev/urandom iflag=fullblock | install -m 600 /dev/sdX2 /etc/cryptsetup.d/root.key 
+    sudo dd bs=512 count=4 if=/dev/urandom iflag=fullblock | sudo install -m 600 /dev/sdX2 /etc/cryptsetup.d/root.key 
 
 ### Check the slots already used for the encryption keys 
  
-    cryptsetup luksDump/dev/sdX2
+    sudo cryptsetup luksDump/dev/sdX2
 
 ### Associate this key to your LUKS setup
  
-    cryptsetup luksAddKey /dev/sdX2 /etc/cryptsetup-key.d/root.key
+    sudo cryptsetup luksAddKey /dev/sdX2 /etc/cryptsetup-key.d/root.key
 
 ### Check the slots again
  
-    cryptsetup luksDump/dev/sdX2
+    sudo cryptsetup luksDump/dev/sdX2
 
 ### Update mkinitcpio.conf
     
@@ -249,9 +249,9 @@ select usb device for boot
 
 ### Install ukify
  
-    pacman -S ukify-tools sbctl
+    sudo pacman -S ukify-tools sbctl
 
-    vim /etc/kernel/uki.conf
+    sudo vim /etc/kernel/uki.conf
 
 ### Create /etc/kernel/uki.conf:
 
@@ -266,7 +266,7 @@ select usb device for boot
 
 ### Generate the key
 
-    ukify genkey --config=/etc/kernel/uki.conf    
+    sudo ukify genkey --config=/etc/kernel/uki.conf    
 
 ### Create /etc/kernel/cmdline  
 ###### cmdline is kept simple to avoid errors with absolute path
@@ -300,12 +300,12 @@ select usb device for boot
 
 ### Genrate secure boot keys
 
-    sbctl create-keys
+    sudo sbctl create-keys
 
 ### Update and reboot
 
-    mkinitcpio -P
-    bootctl update
+    sudo mkinitcpio -P
+    sudo bootctl update
     reboot
 
 
