@@ -1,11 +1,11 @@
 # Archlinux encrypted install
 
-## Features
+### Features
 Install Archlinux on LUKS lvm encrypted disk.
 Install and setup required and usefull tools.
 Setup passkey to avoid double prompt.
 
-## Creating usb bootable installer
+### Creating usb bootable installer
 
 #### Downloading iso
 
@@ -13,7 +13,7 @@ Setup passkey to avoid double prompt.
 
     sudo dd if=path/to/file.iso of=/dev/usb_drive status=progress
 
-## Install process
+### Install process
 
 #### Boot on usb: 
 make sure scure boot is disabled on BIOS
@@ -38,7 +38,7 @@ Update sources:
 
 #### Create your disk architecture
 
-##### Prepare the disk
+###### Prepare the disk
 
 ###### List your partitions
 
@@ -57,14 +57,14 @@ Update sources:
 
 ###### Clean up
 
-    dd if=urandom of=/dev/sdX1 bs=1M status=progress 
-    dd if=urandom of=/dev/sdX2 bs=1M status=progress 
+    dd if=/dev/urandom of=/dev/sdX1 bs=1M status=progress 
+    dd if=/dev/urandom of=/dev/sdX2 bs=1M status=progress 
 
-##### Boot partition
+###### Boot partition
 
     mkfs.vfat -F32 /dev/sdX1
 
-##### Encryption: create the LUKS container and open the container
+###### Encryption: create the LUKS container and open the container
 
     cryptsetup -v luksFormat /dev/sdX2 
     cryptsetup luksOpen /dev/sdX2 lvm
@@ -84,11 +84,11 @@ Update sources:
     lvcreate -l 100%FREE vg -n home        
     lvreduce -L -256M vg/home   
 
-##### Check
+###### Check
     
     lsblk -fp        
 
-##### Format file system
+###### Format file system
 
     mkfs.ext4 /dev/vg/root    
     mkfs.ext4 /dev/vg/home    
@@ -104,7 +104,7 @@ Update sources:
 #### Install minimum packages
 
     pacstrap -K /mnt base linux-lts linux-firmware linux-headers intel-ucode sudo vim
-    
+
 #### Generate fstab
 
     genfstab -U /mnt >> /etc/fstab    
@@ -139,7 +139,7 @@ Update sources:
 
 #### Modify /etc/hosts
 
-    echo "127.0.0.1      localdomain.yourHostname yourHostName" >> /etc/hosts 
+    echo "127.0.0.1       yourHostName.localdomain localdomain" >> /etc/hosts 
 
 #### Set password for root and non-root user
     
@@ -163,23 +163,26 @@ Update sources:
 
 #### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
  
+    MODULES=( ext4 dm-mod dm-crypt )
     HOOKS=(...sd-encrypt lvm2 block ...)
 
 #### Install lvm2
  
     pacman -S lvm2
 
-#### Get /dev/sda2 UUID
+#### Get /dev/sdX2 UUID
  
-    blkid -s UUID -o value /dev/sda2  # LUKS UUID
+    blkid -s UUID -o value /dev/sdX2  # LUKS UUID
 
 #### Set /boot/loader/entries/arch.conf
  
-    title   Arch Linux
-    linux   /vmlinuz-linux
-    initrd  /initramfs-linux.img
-    options rd.luks.name=Replace with LUKS UUID=root root=/dev/mapper/vg-root rw
+    title	Arch Linux
+    linux	/vmlinuz-linux-lts
+    initrd	/initramfs-linux-lts.img
+    initrd	/intel-ucode.img
 
+    options systemd.unit=multi-user.target rd.luks.name=$(blkid -s UUID -o value /dev/sdX2)=lvm root=/dev/vg/root rw
+ 
 #### Set /boot/loader/loader.conf
  
     default arch.conf
@@ -196,11 +199,10 @@ Update sources:
 
 ###### 
 
-#### mkinitcpio.conf
+#### Update mkinitcpio.conf
     
-    MODULES=( ext4 dm-mod dm-crypt )
     FILES=( /etc/cryptsetup-keys.d/root.key )
-    HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt block lvm2 filesystems fsck)
+    HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt lvm2 block filesystems fsck)
 
 #### ukify
  
@@ -278,4 +280,8 @@ Update sources:
 
     mkinitcpio -P
     bootctl update
+
+
+	
+
 
