@@ -222,20 +222,38 @@ select usb device for boot
 
 ## Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
-# 6 LUKS Keyfile
+# 6 LUKS keyfile, UKIFY, cmdline and crypttab
+
+## Skip the LUKS passphrase:
+
+### Create a key and store it in /etc/crypsetup.d
+    
+    dd bs=512 count=4 if=/dev/urandom iflag=fullblock | install -m 600 /dev/sdX2 /etc/cryptsetup.d/root.key 
+
+### Check the slots already used for the encryption keys 
+ 
+    cryptsetup luksDump/dev/sdX2
+
+### Associate this key to your LUKS setup
+ 
+    cryptsetup luksAddKey /dev/sdX2 /etc/cryptsetup-key.d/root.key
+
+### Check the slots again
+ 
+    cryptsetup luksDump/dev/sdX2
 
 ### Update mkinitcpio.conf
     
     FILES=( /etc/cryptsetup-keys.d/root.key )
     HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole sd-encrypt lvm2 block filesystems fsck)
 
-### ukify
+### Install ukify
  
     pacman -S ukify-tools sbctl
 
     vim /etc/kernel/uki.conf
 
-### /etc/kernel/uki.conf:
+### Create /etc/kernel/uki.conf:
 
     [UKI]
     OSRelease=@/etc/os-release
@@ -250,11 +268,12 @@ select usb device for boot
 
     ukify genkey --config=/etc/kernel/uki.conf    
 
-### keep /etc/kernel/cmdline simple to avoid errors with absolute path 
+### Create /etc/kernel/cmdline  
+###### cmdline is kept simple to avoid errors with absolute path
  
     root=/dev/vg/root rw rd.system.gpt_auto=no quiet splash
 
-### /etc/mkinitcpio.d/linux.preset example
+### Setup /etc/mkinitcpio.d/linux.preset: example
  
     # mkinitcpio preset file for the 'linux' package
 
@@ -275,36 +294,19 @@ select usb device for boot
     fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
     fallback_options="-S autodetect"
 
-## Avoid the LUKS passphrase:
-
-### Create a key and store it in /etc/crypsetup.d
-    
-    dd bs=512 count=4 if=/dev/urandom iflag=fullblock | install -m 600 /dev/sdX2 /etc/cryptsetup.d/root.key 
-
-### Check the slots already used for the encryption keys 
- 
-    cryptsetup luksDump/dev/sdX2
-
-### Associate this key to your LUKS setup
- 
-    cryptsetup luksAddKey /dev/sdX2 /etc/cryptsetup-key.d/root.key
-
-### Check the slots again
- 
-    cryptsetup luksDump/dev/sdX2
-
-### create and setup /etc/crypttab.initramfs so you will not be blocked at boot
+### Create and setup /etc/crypttab.initramfs so you will not be blocked at boot
  
     lvm      UUID=xxxxxxxxxxxx   /etc/cryptsetup-key.d/root/key  luks
 
-### sbctl
+### Genrate secure boot keys
 
     sbctl create-keys
 
-### Update 
+### Update and reboot
 
     mkinitcpio -P
     bootctl update
+    reboot
 
 
 	
