@@ -22,31 +22,31 @@ select usb device for boot
 
 #### Welcome on ArchLinux!
 
-#####if your keyboard is azerty, just load the right configuration by
+####if your keyboard is azerty, just load the right configuration by
 
     loadkeys fr
 
-#####setup wifi if needed
+####setup wifi if needed
 
     iwctl station wlan0 get-networks
 
-#####you should see the SSID of your wifi router
+####you should see the SSID of your wifi router
 
     iwctl station wlan0 connect SSID
 
-#####Update sources:
+####Update sources:
 
     pacman -Sy
 
 #### Create your disk architecture
 
-##### Prepare the disk
+#### Prepare the disk
 
-##### List your partitions
+#### List your partitions
 
     lsblk            # list drive
 
-##### Erase and create partitions: parted, fdisk, cfdisk...choose a disk manager 
+#### Erase and create partitions: parted, fdisk, cfdisk...choose a disk manager 
 
     parted /dev/sdX  # enter parted prompt
     p            
@@ -57,40 +57,40 @@ select usb device for boot
     p
     q            
 
-##### Clean up
+#### Clean up
 
     dd if=/dev/urandom of=/dev/sdX1 bs=1M status=progress 
     dd if=/dev/urandom of=/dev/sdX2 bs=1M status=progress 
 
-##### Boot partition
+#### Boot partition
 
     mkfs.vfat -F32 /dev/sdX1
 
-##### Encryption: create the LUKS container and open the container
+#### Encryption: create the LUKS container and open the container
 
     cryptsetup -v luksFormat /dev/sdX2 
     cryptsetup luksOpen /dev/sdX2 lvm
 
-##### Create physical volume ex: named lvm
+#### Create physical volume ex: named lvm
 
     pvcreate /dev/mapper/lvm
 
-##### Create a volume group ex: named vg
+#### Create a volume group ex: named vg
 
     vgcreate vg /dev/mapper/lvm
 
-##### Create logical volumes
+#### Create logical volumes
     
     lvcreate -L 60G vg -n root        
     lvcreate -L 8G vg -n swap       
     lvcreate -l 100%FREE vg -n home        
     lvreduce -L -256M vg/home   
 
-##### Check
+#### Check
     
     lsblk -fp        
 
-##### Format file system
+#### Format file system
 
     mkfs.ext4 /dev/vg/root    
     mkfs.ext4 /dev/vg/home    
@@ -153,7 +153,7 @@ select usb device for boot
  
     %wheel ALL=(ALL) ALL
 
-##### Network
+#### Network
 
     pacman -S dhcpcd iw iwd
     systemctl enable iw.service
@@ -197,9 +197,9 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-##### Time to reboot without installer
+#### Time to reboot without installer
 
-##### 
+#### 
 
 #### Update mkinitcpio.conf
     
@@ -252,7 +252,7 @@ select usb device for boot
     fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
     fallback_options="-S autodetect"
 
-##### If you want to avoid the LUKS passphrase:
+#### If you want to avoid the LUKS passphrase:
 
 #### Create a key and store it in /etc/crypsetup.d
     
@@ -274,11 +274,11 @@ select usb device for boot
  
     lvm      UUID=xxxxxxxxxxxx   /etc/cryptsetup-key.d/root/key  luks
 
-##### sbctl
+#### sbctl
 
     sbctl create-keys
 
-##### Update 
+#### Update 
 
     mkinitcpio -P
     bootctl update
