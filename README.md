@@ -228,7 +228,7 @@ select usb device for boot
 
 ### Create a key and store it in /etc/crypsetup.d
     
-    sudo dd bs=512 count=4 if=/dev/urandom iflag=fullblock | sudo install -m 600 /dev/sdX2 /etc/cryptsetup.d/root.key 
+    sudo dd bs=512 count=4 if=/dev/urandom iflag=fullblock | sudo install -m 600 /dev/stdin /etc/cryptsetup.d/root.key 
 
 ### Check the slots already used for the encryption keys 
  
