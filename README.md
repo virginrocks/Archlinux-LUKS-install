@@ -249,17 +249,23 @@ select usb device for boot
 
 ### Install ukify
 
-##### Build package from AUR 
+##### Clone github's AUR repository 
 
     git clone https://aur.archlinux.org/dracut-ukify.git
 
+##### Go in the folder
+
     cd dracut-ukify
+
+##### Build package 
 
     makepkg -si
 
 ### Create /etc/kernel/uki.conf:
 
     sudo vim /etc/kernel/uki.conf
+
+### Add the folowing to uki.conf:
 
     [UKI]
     OSRelease=@/etc/os-release
@@ -280,6 +286,8 @@ select usb device for boot
 
 ### Create /etc/kernel/cmdline  
 
+    sudo vim /etc/kernel/cmdline
+
 ##### cmdline is kept simple to avoid errors with absolute path
  
     root=/dev/vg/root rw rd.system.gpt_auto=no quiet splash
@@ -289,11 +297,11 @@ select usb device for boot
     # mkinitcpio preset file for the 'linux' package
 
     #ALL_config="/etc/mkinitcpio.conf"
-    #ALL_kver="/boot/vmlinuz-linux-lts"
+    ALL_kver="/boot/vmlinuz-linux-lts"
     ALL_kerneldest="/boot/vmlinuz-linux-lts"
 
-    #PRESETS=('default')
-    PRESETS=('default' 'fallback')
+    PRESETS=('default')
+    #PRESETS=('default' 'fallback')
 
     #default_config="/etc/mkinitcpio.conf"
     #default_image="/boot/initramfs-linux-lts.img"
@@ -302,16 +310,31 @@ select usb device for boot
 
     #fallback_config="/etc/mkinitcpio.conf"
     #fallback_image="/boot/initramfs-linux-fallback.img"
-    fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
-    fallback_options="-S autodetect"
+    #fallback_uki="/boot/EFI/Linux/arch-linux-fallback.efi"
+    #fallback_options="-S autodetect"
 
 ### Create and setup /etc/crypttab.initramfs so you will not be blocked at boot
  
-    lvm      UUID=xxxxxxxxxxxx   /etc/cryptsetup-keys.d/root.key  luks
+    lvm      UUID=$(blkid -s UUID -o value /dev/sdX2)   /etc/cryptsetup-keys.d/root.key  luks
 
 ### Genrate secure boot keys
 
     sudo sbctl create-keys
+
+### Backup LUKS header
+
+    sudo cryptsetup luksHeaderBAckup /dev/sdX2 --header-backup-file ~/sdX2-header-$(date +F%).img
+
+### Edit loader.conf
+
+    sudo vim /boot/loader/loader.conf
+
+### Comment all to hide unecessary  boot console 
+
+    #default arch.conf
+    #timeout 3
+    #console-mode max
+    #editor no
 
 ### Update and reboot
 
