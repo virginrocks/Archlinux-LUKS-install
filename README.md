@@ -307,7 +307,7 @@ select usb device for boot
 
 ### Create and setup /etc/crypttab.initramfs so you will not be blocked at boot
  
-    lvm      UUID=xxxxxxxxxxxx   /etc/cryptsetup-key.d/root/key  luks
+    lvm      UUID=xxxxxxxxxxxx   /etc/cryptsetup-key.d/root.key  luks
 
 ### Genrate secure boot keys
 
