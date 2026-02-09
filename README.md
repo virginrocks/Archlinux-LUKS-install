@@ -325,6 +325,26 @@ select usb device for boot
 
     sudo cryptsetup luksHeaderBackup /dev/sdX2 --header-backup-file ~/sdX2-header-$(date +F%).img
 
+### Create a recovery key for your LUKS
+
+    sudo systemd-cryptenroll /dev/sdX2 --recovery-key
+        🔐 Please enter current passphrase for disk /dev/sdX2: ••••••••••
+        A secret recovery key has been generated for this volume:
+
+             🔐 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+        Please save this secret recovery key at a secure location. It may be used to
+        regain access to the volume if the other configured access credentials have
+        been lost or forgotten. The recovery key may be entered in place of a password
+        whenever authentication is requested.
+        New recovery key enrolled as key slot x.
+
+### Check the recovery key (Only possible if /dev/sdX2 is not mounted)
+
+    sudo systemd-cryptsetup attach test /dev/sdX2
+    🔐 Please enter passphrase or recovery key for disk primary (test): •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+    Set cipher aes, mode xts-plain64, key size 512 bits for device /dev/sdX2.
+
 ### Edit loader.conf
 
     sudo vim /boot/loader/loader.conf
