@@ -128,7 +128,7 @@ select usb device for boot
 
 ### Generate fstab
 
-    genfstab -U /mnt >> /etc/fstab    
+    genfstab -U /mnt >> /mnt/etc/fstab    
 
 ### Archlinux chroot
 
