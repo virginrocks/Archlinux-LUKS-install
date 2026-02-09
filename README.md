@@ -224,7 +224,7 @@ select usb device for boot
 
 # 6 LUKS keyfile, UKIFY, cmdline and crypttab
 
-## Skip the LUKS passphrase:
+### Skip the LUKS passphrase:
 
 ### Create a key and store it in /etc/crypsetup.d
     
@@ -280,7 +280,7 @@ select usb device for boot
 
     sudo ukify genkey --config=/etc/kernel/uki.conf    
 
-##### Install sbctl
+### Install sbctl
  
     sudo pacman -S sbctl
 
@@ -288,7 +288,7 @@ select usb device for boot
 
     sudo vim /etc/kernel/cmdline
 
-##### cmdline is kept simple to avoid errors with absolute path
+### cmdline is kept simple to avoid errors with absolute path
  
     root=/dev/vg/root rw rd.system.gpt_auto=no quiet splash
 
@@ -323,7 +323,7 @@ select usb device for boot
 
 ### Backup LUKS header
 
-    sudo cryptsetup luksHeaderBAckup /dev/sdX2 --header-backup-file ~/sdX2-header-$(date +F%).img
+    sudo cryptsetup luksHeaderBackup /dev/sdX2 --header-backup-file ~/sdX2-header-$(date +F%).img
 
 ### Edit loader.conf
 
