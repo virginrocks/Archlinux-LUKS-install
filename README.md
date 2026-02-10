@@ -26,6 +26,8 @@ Install usefull utilities.
 6. LUKS Keyfile
 Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
+### Core
+
 1. USB Iso
 
 ## Creating usb bootable installer
