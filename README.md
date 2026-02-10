@@ -199,7 +199,7 @@ select usb device for boot
     bootctl status
     bootctl list
 
-    3. Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
+### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
  
     MODULES=( ext4 dm-mod dm-crypt )
     HOOKS=(...sd-encrypt lvm2 block ...)
