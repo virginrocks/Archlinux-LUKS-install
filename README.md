@@ -2,8 +2,8 @@
 
 ## Presentation
 
-This page shows one of the multiple possibilities for installing Archlinux on LUKS2 encrypted LVM disk.
-Warning: this installation uses an hybrid EFI and boot setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
+This page shows one of the multiple possibilities for installing Archlinux on LUKS2 encrypted LVM disk.\n
+⚠️   this installation uses an hybrid EFI and boot setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
 This configuration does not allowed /boot encryption, and there is a risk of conflicts in dual boot cases.
 
 ## Features
