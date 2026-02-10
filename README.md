@@ -8,25 +8,25 @@ This configuration does not allowed /boot encryption, and there is a risk of con
 
 ## Features
 
-1 Iso
+1. Iso
 Download iso and prepare arch iso bootable usb.
 
-2 LUKS LVM
+2. LUKS LVM
 Prepare the disk, set LUKS2 encryption, create physical volume, volume group and logical volumes.
 
-3 Install arch
+3. Install arch
 Pacstarp on /mnt, generate /etc/fstab, arch-chroot /mnt and setup the clock, users, network...
 
-4 Bootctl and mkinitcpio
+4. Bootctl and mkinitcpio
 Setup mkinitcpio.conf, install bootctl, create arch.conf and loader.conf.
 
-5 Boot from installed system
+5. Boot from installed system
 Install usefull utilities.
 
-6 LUKS Keyfile
+6. LUKS Keyfile
 Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
-# 1 Iso
+1. USB Iso
 
 ## Creating usb bootable installer
 
@@ -61,7 +61,7 @@ select usb device for boot
 
     pacman -Sy
 
-# 2 LUKS LVM disk architecture
+2. LUKS LVM disk architecture
 
 ## Prepare the disk
 
@@ -119,7 +119,7 @@ select usb device for boot
     mkfs.ext4 /dev/vg/home    
     mkswap /dev/vg/swap    
 
-# 3 Install Archlinux
+3. Install Archlinux
 
 ### Mount file system
 
@@ -188,18 +188,18 @@ select usb device for boot
     systemctl enable iw.service
     systemctl enable dhcpcd.service
 
-# 4 Bootctl and mkinitcpio.conf
+4. Bootctl and mkinitcpio.conf
 
-### Bootctl setup (You can choose grub also)  
+    1. Bootctl setup (You can choose grub also)  
 
     bootctl install 
 
-### Take a look at bootctl
+    2. Take a look at bootctl
 
     bootctl status
     bootctl list
 
-### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
+    3. Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
  
     MODULES=( ext4 dm-mod dm-crypt )
     HOOKS=(...sd-encrypt lvm2 block ...)
@@ -233,11 +233,11 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-# 5 Reboot on Arch and install packages ✅
+5. Reboot on Arch and install packages ✅
 
 ##### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
-# 6 LUKS keyfile, UKIFY, cmdline and crypttab
+6. LUKS keyfile, UKIFY, cmdline and crypttab
 
 ### Skip the LUKS passphrase:
 
