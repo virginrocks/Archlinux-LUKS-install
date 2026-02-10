@@ -1,5 +1,9 @@
 # Install Archlinux on LVM LUKS2 encrypted disk
 
+## Presentation
+
+This page shows one of the multiple possibilities for installing Archlinux on LUKS2 encrypted LVM disk.
+
 ## Features
 
 1 Iso
