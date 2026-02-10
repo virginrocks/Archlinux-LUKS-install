@@ -1,8 +1,10 @@
-# Install Archlinux on LVM LUKS2 encrypted disk
+# Install Archlinux on LVM LUKS2 encrypted disk 🎉
 
 ## Presentation
 
 This page shows one of the multiple possibilities for installing Archlinux on LUKS2 encrypted LVM disk.
+Warning: this installation uses an hybrid EFI and boot setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
+This configuration does not allowed /boot encryption, and there is a risk of conflicts in dual boot cases.
 
 ## Features
 
@@ -43,11 +45,11 @@ select usb device for boot
 
 ## Welcome on ArchLinux!
 
-### If your keyboard is azerty, just load the right configuration by
+### To change your keyboard layout
 
     loadkeys fr
 
-### Setup wifi if needed
+### Setup wifi
 
     iwctl station wlan0 get-networks
 
@@ -70,33 +72,33 @@ select usb device for boot
 ### Erase and create partitions: parted, fdisk, cfdisk...choose a disk manager 
 
     parted /dev/sdX  # enter parted prompt
-    p            
-    mklabel gpt  
-    mkpart ESP fat32 1MiB 513MiB
-    set 1 esp on
-    mkpart primary 513MiB 100%
-    p
-    q            
+    p                # print partition table   
+    mklabel gpt      # create disk 
+    mkpart esp fat32 1MiB 513MiB # create boot partition named esp
+    set 1 esp on                 # setup esp
+    mkpart primary 513MiB 100%   # main partition
+    p                            # print to check
+    q                            # save and quit
 
 ### Clean up
 
     dd if=/dev/urandom of=/dev/sdX1 bs=1M status=progress 
     dd if=/dev/urandom of=/dev/sdX2 bs=1M status=progress 
 
-### Boot partition
+### Create fat32 file system on esp
 
     mkfs.vfat -F32 /dev/sdX1
 
-### Encryption: create the LUKS container and open the container
+### Create a LUKS2 encrypted container and open it under the name of lvm
 
-    cryptsetup -v luksFormat /dev/sdX2 
-    cryptsetup luksOpen /dev/sdX2 lvm
+    cryptsetup -v luksFormat /dev/sdX2 # remeber the passphrase you will type  
+    cryptsetup luksOpen /dev/sdX2 lvm   
 
-### Create physical volume ex: named lvm
+### Create physical volume named lvm
 
     pvcreate /dev/mapper/lvm
 
-### Create a volume group ex: named vg
+### Create a volume group named vg
 
     vgcreate vg /dev/mapper/lvm
 
@@ -107,11 +109,11 @@ select usb device for boot
     lvcreate -l 100%FREE vg -n home        
     lvreduce -L -256M vg/home   
 
-### Check
+### Check volumes
     
     lsblk -fp        
 
-### Format file system
+### Format filesystems
 
     mkfs.ext4 /dev/vg/root    
     mkfs.ext4 /dev/vg/home    
@@ -121,7 +123,7 @@ select usb device for boot
 
 ### Mount file system
 
-    mount /dev/vg/root /mnt
+    mount /dev/vg/root /mnt # eg. /dev/mapper/vg-root
     mount --mkdir -o uid=0,gid=0,fmask=0077,dmask=0077 /dev/sda1 /mnt/boot
     mount --mkdir /dev/vg/home /mnt/home
     swapon /dev/vg/swap
@@ -134,11 +136,11 @@ select usb device for boot
 
     genfstab -U /mnt >> /mnt/etc/fstab    
 
-### Archlinux chroot
+### Enter the chroot environment
 
     arch-chroot /mnt
 
-### Time zone
+### Time zone setup
 
     ln -sf /usr/share/zoneinfo/Region/City /etc/localetime
 
@@ -173,14 +175,14 @@ select usb device for boot
 ### Set password for root and non-root user
     
     passwd    
-    useradd -m -G wheel,storage,audio,video -s /bin/bash yourUserName
+    useradd -m -G wheel,storage,audio,video -s /bin/bash yourUserName # -m creates user's folder
     passwd yourUserName
 
 ### Uncomment #%wheel ALL=(ALL) ALL in /etc/sudoers to allow non-root user to run sudo 
  
     %wheel ALL=(ALL) ALL
 
-### Network
+### Network setup 
 
     pacman -S dhcpcd iw iwd
     systemctl enable iw.service
@@ -188,9 +190,14 @@ select usb device for boot
 
 # 4 Bootctl and mkinitcpio.conf
 
-### Bootctl
- 
-    bootctl install
+### Bootctl setup (You can choose grub also)  
+
+    bootctl install 
+
+### Take a look at bootctl
+
+    bootctl status
+    bootctl list
 
 ### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
  
@@ -226,7 +233,7 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-# 5 Reboot on Arch and install packages 
+# 5 Reboot on Arch and install packages ✅
 
 ##### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
