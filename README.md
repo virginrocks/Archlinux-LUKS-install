@@ -91,7 +91,7 @@ select usb device for boot
 
 ### Create a LUKS2 encrypted container and open it under the name of lvm
 
-    cryptsetup -v luksFormat /dev/sdX2 # remeber the passphrase you will type  
+    cryptsetup -v luksFormat /dev/sdX2 # remember the passphrase you will type  
     cryptsetup luksOpen /dev/sdX2 lvm   
 
 ### Create physical volume named lvm
