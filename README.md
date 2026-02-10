@@ -74,9 +74,9 @@ select usb device for boot
     parted /dev/sdX  # enter parted prompt
     p                # print partition table   
     mklabel gpt      # create disk 
-    mkpart esp fat32 1MiB 513MiB # create boot partition named esp
+    mkpart esp fat32 1MiB 1025MiB # create boot partition named esp
     set 1 esp on                 # setup esp
-    mkpart primary 513MiB 100%   # main partition
+    mkpart primary 1025MiB 100%   # main partition
     p                            # print to check
     q                            # save and quit
 
