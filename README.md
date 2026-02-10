@@ -3,8 +3,8 @@
 ## Presentation
 
 This page shows one of the multiple possibilities for installing Archlinux on LUKS2 encrypted LVM disk.
-⚠️   this installation uses an hybrid EFI and boot setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
-This configuration does not allowed /boot encryption, and there is a risk of conflicts in dual boot cases.
+⚠️   This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
+This configuration does not allowed /boot encryption, and there is a risk of _conflicts_ in dual boot cases.
 
 ## Features
 
@@ -26,9 +26,7 @@ Install usefull utilities.
 6. LUKS Keyfile
 Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
-### Core
-
-1. USB Iso
+# 1. Iso
 
 ## Creating usb bootable installer
 
@@ -63,7 +61,7 @@ select usb device for boot
 
     pacman -Sy
 
-2. LUKS LVM disk architecture
+# 2. LUKS LVM disk architecture
 
 ## Prepare the disk
 
@@ -121,7 +119,7 @@ select usb device for boot
     mkfs.ext4 /dev/vg/home    
     mkswap /dev/vg/swap    
 
-3. Install Archlinux
+# 3. Install Archlinux
 
 ### Mount file system
 
@@ -190,13 +188,13 @@ select usb device for boot
     systemctl enable iw.service
     systemctl enable dhcpcd.service
 
-4. Bootctl and mkinitcpio.conf
+# 4. Bootctl and mkinitcpio.conf
 
-    1. Bootctl setup (You can choose grub also)  
+### Bootctl setup (You can choose grub also)  
 
     bootctl install 
 
-    2. Take a look at bootctl
+### Take a look at bootctl
 
     bootctl status
     bootctl list
@@ -235,11 +233,11 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
-5. Reboot on Arch and install packages ✅
+# 5. Reboot on Arch and install packages ✅
 
 ##### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
-6. LUKS keyfile, UKIFY, cmdline and crypttab
+# 6. LUKS keyfile, UKIFY, cmdline and crypttab
 
 ### Skip the LUKS passphrase:
 
