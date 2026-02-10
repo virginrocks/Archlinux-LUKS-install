@@ -150,8 +150,12 @@ select usb device for boot
 
     hwclock --systohc    
 
-### Genreate locale and uncomment the line matching your language in /etc/locale.gen
+### Uncomment the line matching your language in /etc/locale.gen
 
+    fr_CH.UTF-8 UTF-8
+
+##  Generate locale 
+    
     locale-gen
 
 ### Create vconsole.conf
