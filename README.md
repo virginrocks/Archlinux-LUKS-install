@@ -233,6 +233,22 @@ select usb device for boot
     mkinitcpio -P
     bootctl update
 
+### Cleanly exit from chroot
+
+    exit
+
+    umount -R /mnt
+
+#### Deactivate logical volumes in volume group
+
+    vgchange -an
+
+#### Close LUKS container
+
+    crytsetup luksClose lvm
+
+    reboot
+
 # 5. Reboot on Arch and install packages ✅
 
 ##### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
