@@ -415,6 +415,8 @@ The following option -m preserve vendor keys from being enrolled.
     sudo bootctl update
     reboot
 
+## Next: Dual boot Arch Linux / Rocky Linux setup
+
 
 
 
