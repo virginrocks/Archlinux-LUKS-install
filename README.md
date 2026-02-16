@@ -348,10 +348,6 @@ select usb device for boot
  
     lvm      UUID=$(blkid -s UUID -o value /dev/sdX2)   /etc/cryptsetup-keys.d/root.key  luks
 
-### Genrate secure boot keys
-
-    sudo sbctl create-keys
-
 ### Backup LUKS header
 
     sudo cryptsetup luksHeaderBackup /dev/sdX2 --header-backup-file ~/sdX2-header-$(date +F%).img
@@ -381,6 +377,8 @@ select usb device for boot
     sudo vim /boot/loader/loader.conf
 
 ### Comment all to hide unecessary  boot console 
+If there is only Arch to boot with bootctl, there's no menu.
+In the case of dual boot, this file becomes important to display boot menu.
 
     #default arch.conf
     #timeout 3
@@ -392,6 +390,32 @@ select usb device for boot
     sudo mkinitcpio -P
     sudo bootctl update
     reboot
+
+### Genrate secure boot keys
+
+    sudo sbctl create-keys
+
+### Reboot to Setup Mode
+To enroll sbctl keys, BIOS secure mode must be set to Setup Mode
+Refer to your machine's bios manual.
+
+### Enroll secure bootkeys
+The following option -m preserve vendor keys from being enrolled.  
+
+    sudo sbctl enroll-keys -m
+
+### Sign boot files with sbctl
+
+    sudo sbctl sign-all
+    sudo sbctl verify
+
+### Update and reboot
+
+    sudo mkinitcpio -P
+    sudo bootctl update
+    reboot
+
+
 
 
 	
