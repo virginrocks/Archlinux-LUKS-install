@@ -6,7 +6,7 @@ This page shows one of the multiple possibilities for installing Archlinux on LU
 
 This example shows a manual install process, the simple way is indeed to use native's arch installation script.
 
-⚠️   This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at boot, mixing UEFI files with Linux kernel files. 
+:red_circle: This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at boot, mixing UEFI files with Linux kernel files. 
 
 :bulb: This configuration does not allowed /boot encryption, and there is a risk of _conflicts_ in dual boot cases.
 
@@ -52,7 +52,7 @@ https://archlinux.org/download/#http-downloads
 
 ### Boot on usb:
 
-🔔 Make sure sure Secure Boot is disabled on BIOS
+:bell: Make sure sure Secure Boot is disabled on BIOS
 
 Select usb device for boot
 
@@ -340,7 +340,7 @@ Later in this document is described the process for enhancing the boot sequence 
 
     reboot
 
-# 5. Reboot on Arch and install packages ✅
+# 5. :white_check_mark: Reboot on Arch and install packages 
 
 ##### Follow https://github.com/silentz/arch-linux-install-guide for usefull utilities
 
@@ -452,10 +452,10 @@ The following command does two things: generate a 2Ko key and puts it in /etc/cr
 ### Create a recovery key for your LUKS
 
     sudo systemd-cryptenroll /dev/sdX2 --recovery-key
-        🔐 Please enter current passphrase for disk /dev/sdX2: ••••••••••
+        :closed_lock_with_key: Please enter current passphrase for disk /dev/sdX2: ••••••••••
         A secret recovery key has been generated for this volume:
 
-             🔐 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+             :closed_lock_with_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         Please save this secret recovery key at a secure location. It may be used to
         regain access to the volume if the other configured access credentials have
@@ -466,7 +466,7 @@ The following command does two things: generate a 2Ko key and puts it in /etc/cr
 ### Check the recovery key (Only possible if /dev/sdX2 is not mounted)
 
     sudo systemd-cryptsetup attach test /dev/sdX2
-    🔐 Please enter passphrase or recovery key for disk primary (test): •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+    :closed_lock_with_key: Please enter passphrase or recovery key for disk primary (test): •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
     Set cipher aes, mode xts-plain64, key size 512 bits for device /dev/sdX2.
 
 ### Edit loader.conf
