@@ -108,7 +108,7 @@ This stands for the modern standard for disk partitionning on UEFI systems and l
 
 Let's create first partition for arch boot, dev/sdX1, in which will be installed both kernel (vmliuz, initramfs) and UEFI (grub or systemd boot) files.
 
-Another solution would be to create two partitions: one in ext4 or xfs to store the kernel files, and one in fat32 to store UEFI files in order to keep them separate from each other 
+:vs: Another solution would be to create two partitions: one in ext4 or xfs to store the kernel files, and one in fat32 to store UEFI files in order to keep them separate from each other 
 
 | Aspect             | Single /boot           | Dual /boot + /boot/efi                |
 | ------------------ | ---------------------- | ------------------------------------- |
