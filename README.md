@@ -6,7 +6,7 @@ This page shows one of the multiple possibilities for installing Archlinux on LU
 
 This example shows a manual install process, the simple way is indeed to use native's arch installation script.
 
-⚠️   This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
+⚠️   This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at boot, mixing UEFI files with Linux kernel files. 
 
 🔔 This configuration does not allowed /boot encryption, and there is a risk of _conflicts_ in dual boot cases.
 
