@@ -76,7 +76,7 @@ The arch installer provides a large set of tools, including the wifi network too
 
 # 2. LUKS LVM disk architecture
 
-## :disk: Prepare the disk
+## :dvd: Prepare the disk
 
 🔔 Assuming that you start an installation with empty or erasable disk space
 
