@@ -42,6 +42,8 @@ Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
 ### Downloading iso
 
+https://pkg.adfinis-on-exoscale.ch/archlinux/iso/2026.02.01/
+
 ### Copying iso on usb device
 
     sudo dd if=path/to/file.iso of=/dev/usb_drive status=progress
