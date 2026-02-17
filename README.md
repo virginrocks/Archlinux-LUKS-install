@@ -8,7 +8,7 @@ This example shows a manual install process, the simple way is indeed to use nat
 
 ⚠️   This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
 
-This configuration does not allowed /boot encryption, and there is a risk of _conflicts_ in dual boot cases.
+🔔 This configuration does not allowed /boot encryption, and there is a risk of _conflicts_ in dual boot cases.
 
 ## Features
 
@@ -44,7 +44,7 @@ Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
 ### Boot on usb:
 
-Make sure sure Secure Boot is disabled on BIOS
+🔔 Make sure sure Secure Boot is disabled on BIOS
 
 Select usb device for boot
 
@@ -72,7 +72,7 @@ The arch installer provides a large set of tools, including the wifi network too
 
 ## Prepare the disk
 
-Assuming that you start an installation with empty or erasable disk space
+🔔 Assuming that you start an installation with empty or erasable disk space
 
 If you wish create a dual boot architecture, do not follow this steps
 
@@ -150,7 +150,7 @@ First, the main partition is going to be fully encrypted with LUKS2
 
 The passphrase you will give will be stored by LUKS (cryptsetup luksDump /dev/sdx2 to print LUKS header informations)
 
-Avoid to loose your passphrase before you create a keyfile and a recovery key
+🔔 Avoid to loose your passphrase before you create a keyfile and a recovery key
 
     cryptsetup -v luksFormat /dev/sdX2   
     cryptsetup luksOpen /dev/sdX2 lvm   
@@ -466,7 +466,9 @@ The following command does two things: generate a 2Ko key and puts it in /etc/cr
     sudo vim /boot/loader/loader.conf
 
 ### Comment all to hide unecessary  boot console 
+
 If there is only Arch to boot with bootctl, there's no menu.
+
 In the case of dual boot, this file becomes important to display boot menu.
 
     #default arch.conf
@@ -485,10 +487,13 @@ In the case of dual boot, this file becomes important to display boot menu.
     sudo sbctl create-keys
 
 ### Reboot to Setup Mode
+
 To enroll sbctl keys, BIOS secure mode must be set to Setup Mode
+
 Refer to your machine's bios manual.
 
 ### Enroll secure bootkeys
+
 The following option -m preserve vendor keys from being enrolled.  
 
     sudo sbctl enroll-keys -m
@@ -504,7 +509,7 @@ The following option -m preserve vendor keys from being enrolled.
     sudo bootctl update
     reboot
 
-## Next: Dual boot Arch Linux / Rocky Linux setup
+## ⏳ Next: Dual boot Arch Linux / Rocky Linux setup
 
 
 
