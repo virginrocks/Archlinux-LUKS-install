@@ -449,13 +449,13 @@ The following command does two things: generate a 2Ko key and puts it in /etc/cr
 
     sudo cryptsetup luksHeaderBackup /dev/sdX2 --header-backup-file ~/sdX2-header-$(date +F%).img
 
-### Create a recovery key for your LUKS
+### :closed_lock_with_key: Create a recovery key for your LUKS
 
     sudo systemd-cryptenroll /dev/sdX2 --recovery-key
-        :lock: :key: Please enter current passphrase for disk /dev/sdX2: ••••••••••
+        🔐 Please enter current passphrase for disk /dev/sdX2: ••••••••••
         A secret recovery key has been generated for this volume:
 
-             :lock: :key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+             🔐 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         Please save this secret recovery key at a secure location. It may be used to
         regain access to the volume if the other configured access credentials have
@@ -466,7 +466,7 @@ The following command does two things: generate a 2Ko key and puts it in /etc/cr
 ### Check the recovery key (Only possible if /dev/sdX2 is not mounted)
 
     sudo systemd-cryptsetup attach test /dev/sdX2
-    :lock: :key: Please enter passphrase or recovery key for disk primary (test): •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+    🔐 Please enter passphrase or recovery key for disk primary (test): •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
     Set cipher aes, mode xts-plain64, key size 512 bits for device /dev/sdX2.
 
 ### Edit loader.conf
