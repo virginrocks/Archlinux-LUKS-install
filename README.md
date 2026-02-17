@@ -100,7 +100,6 @@ This stands for the modern standard for disk partitionning on UEFI systems and l
 
     mklabel gpt     
 
-Create a first partition names esp in vfat file system dedicated for arch's boot, in which will be stored the kernel files (vmlinuz, initramfs) and the bootloader files (bootctl or grub files)
 
 Another solution would be to create two partitions 
 
