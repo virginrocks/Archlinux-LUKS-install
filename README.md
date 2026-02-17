@@ -76,7 +76,7 @@ The arch installer provides a large set of tools, including the wifi network too
 
 # 2. LUKS LVM disk architecture
 
-## Prepare the disk
+## :disk: Prepare the disk
 
 🔔 Assuming that you start an installation with empty or erasable disk space
 
@@ -156,7 +156,7 @@ First, the main partition is going to be fully encrypted with LUKS2
 
 The passphrase you will give will be stored by LUKS (cryptsetup luksDump /dev/sdx2 to print LUKS header informations)
 
-🔔 Avoid to loose your passphrase before you create a keyfile and a recovery key
+:bulb: Avoid to loose your passphrase before you create a keyfile and a recovery key
 
     cryptsetup -v luksFormat /dev/sdX2   
     cryptsetup luksOpen /dev/sdX2 lvm   
@@ -350,7 +350,7 @@ As earlyer mentioned, the LUKS passphrase prompt can be skipped by creating a de
 
     sudo mkdir -p /etc/cryptsetup-keys.d
 
-### Create a key and store it in /etc/crypsetup.d
+### :key: Create a key and store it in /etc/crypsetup.d
 
 The following command does two things: generate a 2Ko key and puts it in /etc/cryptsetu-keys.d with permissions -r-x------.
     
@@ -360,7 +360,7 @@ The following command does two things: generate a 2Ko key and puts it in /etc/cr
  
     sudo cryptsetup luksDump/dev/sdX2
 
-### Associate this key to your LUKS setup
+### :lock: Associate this key to your LUKS setup
  
     sudo cryptsetup luksAddKey /dev/sdX2 /etc/cryptsetup-keys.d/root.key
 
