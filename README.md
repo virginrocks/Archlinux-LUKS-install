@@ -1,4 +1,4 @@
-# LUKS encrypted LVM Arch Linux Install guide 🎉
+# :herb: LUKS encrypted LVM Arch Linux Install guide 
 
 ## Presentation
 
