@@ -13,21 +13,27 @@ This example shows a manual install process, the simple way is indeed to use nat
 ## Features
 
 1. Iso
+
 Download iso and prepare arch iso bootable usb.
 
 2. LUKS LVM
+
 Prepare the disk, set LUKS2 encryption, create physical volume, volume group and logical volumes.
 
 3. Install arch
+
 Pacstarp on /mnt, generate /etc/fstab, arch-chroot /mnt and setup the clock, users, network...
 
 4. Bootctl and mkinitcpio
+
 Setup mkinitcpio.conf, install bootctl, create arch.conf and loader.conf.
 
 5. Boot from installed system
+
 Install usefull utilities.
 
 6. LUKS Keyfile
+
 Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
 # 1. Iso
