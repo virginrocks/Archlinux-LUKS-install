@@ -3,7 +3,11 @@
 ## Presentation
 
 This page shows one of the multiple possibilities for installing Archlinux on LUKS2 encrypted LVM disk.
+
+This example shows a manual install process, the simple way is indeed to use native's arch installation script.
+
 ⚠️   This installation uses an *_hybrid_* *EFI and boot* setup using systemd-boot, where the fat32 ESP is mounted at /boot, mixing UEFI files with Linux kernel files. 
+
 This configuration does not allowed /boot encryption, and there is a risk of _conflicts_ in dual boot cases.
 
 ## Features
@@ -32,16 +36,17 @@ Generate keyfile, add to LUKS2, setup cmdline, linux.preset, crypttab.initramfs.
 
 ### Downloading iso
 
-### Cpying iso on usb device
+### Copying iso on usb device
 
     sudo dd if=path/to/file.iso of=/dev/usb_drive status=progress
 
 ## Install process
 
-### Boot on usb: 
+### Boot on usb:
 
-make sure scure boot is disabled on BIOS
-select usb device for boot
+Make sure sure Secure Boot is disabled on BIOS
+
+Select usb device for boot
 
 ## Welcome on ArchLinux!
 
@@ -49,13 +54,15 @@ select usb device for boot
 
     loadkeys fr
 
-### Setup wifi
+### Setup wifi or plug ethernet
+
+The arch installer provides a large set of tools, including the wifi network tool iwctl
 
     iwctl station wlan0 get-networks
 
 ### You should see the SSID of your wifi router
 
-    iwctl station wlan0 connect SSID
+    iwctl station wlan0 connect YOUR_SSID
 
 ### Update sources:
 
@@ -65,15 +72,38 @@ select usb device for boot
 
 ## Prepare the disk
 
+Assuming that you start an installation with empty or erasable disk space
+
+If you wish create a dual boot architecture, do not follow this steps
+
 ### List your partitions
 
     lsblk            # list drive
 
 ### Erase and create partitions: parted, fdisk, cfdisk...choose a disk manager 
 
-    parted /dev/sdX  # enter parted prompt
-    p                # print partition table   
-    mklabel gpt      # create disk 
+Let's use parted, but choice is yours
+
+Enter parted
+
+    parted /dev/sdX  
+
+Printing detailed gpt infos including labels
+
+    p                   
+
+Install GUID Partition Table (GPT)
+
+The gpt stores human readable labels in the partition entry array at the disk start and mirrored at the end for redundancy 
+
+This stands for the modern standard for disk partitionning on UEFI systems and large drives (old system is MBR)
+
+    mklabel gpt     
+
+Create a first partition names esp in vfat file system dedicated for arch's boot, in which will be stored the kernel files (vmlinuz, initramfs) and the bootloader files (bootctl or grub files)
+
+Another solution would be to create two partitions 
+
     mkpart esp fat32 1MiB 1025MiB # create boot partition named esp
     set 1 esp on                 # setup esp
     mkpart primary 1025MiB 100%   # main partition
