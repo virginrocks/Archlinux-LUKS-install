@@ -100,28 +100,70 @@ This stands for the modern standard for disk partitionning on UEFI systems and l
 
     mklabel gpt     
 
+Let's create first partition for arch boot, dev/sdX1, in which will be installed both kernel (vmliuz, initramfs) and UEFI (grub or systemd boot) files.
 
-Another solution would be to create two partitions 
+Another solution would be to create two partitions: one in ext4 or xfs to store the kernel files, and one in fat32 to store UEFI files in order to keep them separate from each other 
 
-    mkpart esp fat32 1MiB 1025MiB # create boot partition named esp
-    set 1 esp on                 # setup esp
-    mkpart primary 1025MiB 100%   # main partition
-    p                            # print to check
-    q                            # save and quit
+| Aspect             | Single /boot           | Dual /boot + /boot/efi                |
+| ------------------ | ---------------------- | ------------------------------------- |
+| UEFI Compliance    | Partial (FAT32 only)   | Full (dedicated ESP)                  |
+| Encryption Support | Limited (no LUKS root) | Strong (LUKS root + optional /boot)   |
+| Size/Complexity    | Smaller, simpler       | More partitions, but standard         |
+| Use Case           | BIOS or minimal UEFI   | Modern UEFI + encryption              |
+
+    mkpart esp fat32 1MiB 1025MiB 
+
+Set boot flag on boot partition /dev/sdX1
+
+    set 1 esp on                 
+
+Create main partition, which will be later encrypted and sliced into logical volumes (lv) within both physical and group volumes (pv & vg)
+
+    mkpart primary 1025MiB 100%   
+
+Print and check
+
+    p                            
+
+Save and exit parted utility
+
+    q                            
 
 ### Clean up
+
+A good practice is to erase the disk by writing random data sequences with dd
+
+Note: Can take a while, replace urandom with zero to make it faster if your time is limited
 
     dd if=/dev/urandom of=/dev/sdX1 bs=1M status=progress 
     dd if=/dev/urandom of=/dev/sdX2 bs=1M status=progress 
 
 ### Create fat32 file system on esp
 
+Fat32 can store both UEFI and Kernel files, the opposite isn't true (we can't store UEFI files in Linux file system)
+
     mkfs.vfat -F32 /dev/sdX1
 
 ### Create a LUKS2 encrypted container and open it under the name of lvm
 
-    cryptsetup -v luksFormat /dev/sdX2 # remember the passphrase you will type  
+First, the main partition is going to be fully encrypted with LUKS2
+
+The passphrase you will have to furnish will be stored in the shape of a ciphered file in luks header system (cryptsetup luksDump /dev/sdx2 to take a look at the storage slots details)
+
+Avoid to loose your pasphrase before you create a keyfile and a recovery key
+
+    cryptsetup -v luksFormat /dev/sdX2   
     cryptsetup luksOpen /dev/sdX2 lvm   
+
+### Logical Volume Management (LVM)
+
+Here is the LVM part, wich allows great flexibility as it can be easily resized without data loss and allows disks to be snapshooted
+
+| Aspect       | Static Partitions                     | LVM                                 |
+| ------------ | ------------------------------------- | ----------------------------------- |
+| I/O Overhead | Minimal, direct access  | Slight due to layers |
+| Resize Speed | Offline, complex              | Online, straightforward      |
+| Multi-Disk   | Manual spanning needed                | Native pooling             |
 
 ### Create physical volume named lvm
 
@@ -131,7 +173,7 @@ Another solution would be to create two partitions
 
     vgcreate vg /dev/mapper/lvm
 
-### Create logical volumes
+### Create logical volumes root, swap and home
     
     lvcreate -L 60G vg -n root        
     lvcreate -L 8G vg -n swap       
@@ -142,7 +184,7 @@ Another solution would be to create two partitions
     
     lsblk -fp        
 
-### Format filesystems
+### Format filesystems (eg. ext4 or other like xfs)
 
     mkfs.ext4 /dev/vg/root    
     mkfs.ext4 /dev/vg/home    
