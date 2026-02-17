@@ -148,9 +148,9 @@ Fat32 can store both UEFI and Kernel files, the opposite isn't true (we can't st
 
 First, the main partition is going to be fully encrypted with LUKS2
 
-The passphrase you will have to furnish will be stored in the shape of a ciphered file in luks header system (cryptsetup luksDump /dev/sdx2 to take a look at the storage slots details)
+The passphrase you will give will be stored by LUKS (cryptsetup luksDump /dev/sdx2 to print LUKS header informations)
 
-Avoid to loose your pasphrase before you create a keyfile and a recovery key
+Avoid to loose your passphrase before you create a keyfile and a recovery key
 
     cryptsetup -v luksFormat /dev/sdX2   
     cryptsetup luksOpen /dev/sdX2 lvm   
@@ -270,7 +270,9 @@ Here is the LVM part, wich allows great flexibility as it can be easily resized 
     bootctl status
     bootctl list
 
-### Set mkinitcpio for LUKS encrypt: add sd-encrypt lvm2 before block
+### Set mkinitcpio 
+
+Edit /etc/mkinitcpio.conf, add sd-encrypt lvm2 before block in HOOKS, and answer MODULES 
  
     MODULES=( ext4 dm-mod dm-crypt )
     HOOKS=(...sd-encrypt lvm2 block ...)
@@ -280,6 +282,12 @@ Here is the LVM part, wich allows great flexibility as it can be easily resized 
     pacman -S lvm2
 
 ### Get /dev/sdX2 UUID
+
+Get LUKS UUID to allow the decryption process at boot
+
+At this point, you will have to give the disk passphrase at reboot
+
+Later in this document is described the process for enhancing the boot sequence by setting a keyfile, which allows booting without passphrae
  
     blkid -s UUID -o value /dev/sdX2  # LUKS UUID
 
@@ -304,9 +312,13 @@ Here is the LVM part, wich allows great flexibility as it can be easily resized 
     mkinitcpio -P
     bootctl update
 
-### Cleanly exit from chroot
+### Cleanly exit and reboot
+
+#### Exit from chroot
 
     exit
+
+#### Unmount file system from /mnt
 
     umount -R /mnt
 
@@ -326,9 +338,15 @@ Here is the LVM part, wich allows great flexibility as it can be easily resized 
 
 # 6. LUKS keyfile, UKIFY, cmdline and crypttab
 
-### Skip the LUKS passphrase:
+As earlyer mentioned, the LUKS passphrase prompt can be skipped by creating a dedicated keyfile 
+
+### Create the keys direcory
+
+    sudo mkdir -p /etc/cryptsetup-keys.d
 
 ### Create a key and store it in /etc/crypsetup.d
+
+The following command does two things: generate a 2Ko key and puts it in /etc/cryptsetu-keys.d with permissions -r-x------.
     
     sudo dd bs=512 count=4 if=/dev/urandom iflag=fullblock | sudo install -m 600 /dev/stdin /etc/cryptsetup-keys.d/root.key 
 
