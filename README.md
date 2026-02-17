@@ -1,4 +1,4 @@
-# Install Archlinux on LVM LUKS2 encrypted disk 🎉
+# LUKS encrypted LVM Arch Linux Install guide 🎉
 
 ## Presentation
 
