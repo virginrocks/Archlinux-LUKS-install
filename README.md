@@ -14,11 +14,11 @@ This example shows a manual install process, the simple way is indeed to use nat
 
 1. Iso
 
-Download iso and prepare arch iso bootable usb.
+:cd: Download iso and prepare arch iso bootable usb.
 
 2. LUKS LVM
 
-Prepare the disk, set LUKS2 encryption, create physical volume, volume group and logical volumes.
+:dvd: Prepare the disk, set LUKS2 encryption, create physical volume, volume group and logical volumes.
 
 3. Install arch
 
@@ -78,7 +78,7 @@ The arch installer provides a large set of tools, including the wifi network too
 
 ## :dvd: Prepare the disk
 
-🔔 Assuming that you start an installation with empty or erasable disk space
+:bulb: Assuming that you start an installation with empty or erasable disk space
 
 If you wish create a dual boot architecture, do not follow this steps
 
@@ -217,7 +217,7 @@ Here is the LVM part, wich allows great flexibility as it can be easily resized 
 
     arch-chroot /mnt
 
-### Time zone setup
+### :date: Time zone setup
 
     ln -sf /usr/share/zoneinfo/Region/City /etc/localetime
 
